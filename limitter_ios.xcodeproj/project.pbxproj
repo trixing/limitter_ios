@@ -14,6 +14,9 @@
 		493C133C1DB17B4000A9D711 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 493C133A1DB17B4000A9D711 /* LaunchScreen.storyboard */; };
 		493C13471DB17B4000A9D711 /* limitter_iosTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 493C13461DB17B4000A9D711 /* limitter_iosTests.swift */; };
 		493C13521DB17B4000A9D711 /* limitter_iosUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 493C13511DB17B4000A9D711 /* limitter_iosUITests.swift */; };
+		493C13621DB17B5A00A9D711 /* HealthKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 493C13611DB17B5A00A9D711 /* HealthKit.framework */; };
+		493C13641DB188BC00A9D711 /* CoreBluetooth.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 493C13631DB188BC00A9D711 /* CoreBluetooth.framework */; };
+		49AB447A1DBC0A5900F922FA /* HealthKitManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49AB44791DBC0A5900F922FA /* HealthKitManager.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -47,6 +50,10 @@
 		493C134D1DB17B4000A9D711 /* limitter_iosUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = limitter_iosUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		493C13511DB17B4000A9D711 /* limitter_iosUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = limitter_iosUITests.swift; sourceTree = "<group>"; };
 		493C13531DB17B4000A9D711 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		493C135F1DB17B5A00A9D711 /* limitter_ios.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = limitter_ios.entitlements; sourceTree = "<group>"; };
+		493C13611DB17B5A00A9D711 /* HealthKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = HealthKit.framework; path = System/Library/Frameworks/HealthKit.framework; sourceTree = SDKROOT; };
+		493C13631DB188BC00A9D711 /* CoreBluetooth.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreBluetooth.framework; path = System/Library/Frameworks/CoreBluetooth.framework; sourceTree = SDKROOT; };
+		49AB44791DBC0A5900F922FA /* HealthKitManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HealthKitManager.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -54,6 +61,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				493C13641DB188BC00A9D711 /* CoreBluetooth.framework in Frameworks */,
+				493C13621DB17B5A00A9D711 /* HealthKit.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -81,6 +90,7 @@
 				493C13451DB17B4000A9D711 /* limitter_iosTests */,
 				493C13501DB17B4000A9D711 /* limitter_iosUITests */,
 				493C132F1DB17B4000A9D711 /* Products */,
+				493C13601DB17B5A00A9D711 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -97,8 +107,10 @@
 		493C13301DB17B4000A9D711 /* limitter_ios */ = {
 			isa = PBXGroup;
 			children = (
+				493C135F1DB17B5A00A9D711 /* limitter_ios.entitlements */,
 				493C13311DB17B4000A9D711 /* AppDelegate.swift */,
 				493C13331DB17B4000A9D711 /* ViewController.swift */,
+				49AB44791DBC0A5900F922FA /* HealthKitManager.swift */,
 				493C13351DB17B4000A9D711 /* Main.storyboard */,
 				493C13381DB17B4000A9D711 /* Assets.xcassets */,
 				493C133A1DB17B4000A9D711 /* LaunchScreen.storyboard */,
@@ -123,6 +135,15 @@
 				493C13531DB17B4000A9D711 /* Info.plist */,
 			);
 			path = limitter_iosUITests;
+			sourceTree = "<group>";
+		};
+		493C13601DB17B5A00A9D711 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				493C13631DB188BC00A9D711 /* CoreBluetooth.framework */,
+				493C13611DB17B5A00A9D711 /* HealthKit.framework */,
+			);
+			name = Frameworks;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -193,7 +214,13 @@
 				TargetAttributes = {
 					493C132D1DB17B4000A9D711 = {
 						CreatedOnToolsVersion = 8.0;
+						DevelopmentTeam = 7Q3KC92REJ;
 						ProvisioningStyle = Automatic;
+						SystemCapabilities = {
+							com.apple.HealthKit = {
+								enabled = 1;
+							};
+						};
 					};
 					493C13411DB17B4000A9D711 = {
 						CreatedOnToolsVersion = 8.0;
@@ -261,6 +288,7 @@
 			files = (
 				493C13341DB17B4000A9D711 /* ViewController.swift in Sources */,
 				493C13321DB17B4000A9D711 /* AppDelegate.swift in Sources */,
+				49AB447A1DBC0A5900F922FA /* HealthKitManager.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -412,6 +440,8 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = limitter_ios/limitter_ios.entitlements;
+				DEVELOPMENT_TEAM = 7Q3KC92REJ;
 				INFOPLIST_FILE = limitter_ios/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = "net.trixing.limitter-ios";
@@ -424,6 +454,8 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = limitter_ios/limitter_ios.entitlements;
+				DEVELOPMENT_TEAM = 7Q3KC92REJ;
 				INFOPLIST_FILE = limitter_ios/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = "net.trixing.limitter-ios";
@@ -505,6 +537,7 @@
 				493C13581DB17B4000A9D711 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		493C13591DB17B4000A9D711 /* Build configuration list for PBXNativeTarget "limitter_iosTests" */ = {
 			isa = XCConfigurationList;
@@ -513,6 +546,7 @@
 				493C135B1DB17B4000A9D711 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		493C135C1DB17B4000A9D711 /* Build configuration list for PBXNativeTarget "limitter_iosUITests" */ = {
 			isa = XCConfigurationList;
@@ -521,6 +555,7 @@
 				493C135E1DB17B4000A9D711 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
