@@ -10,6 +10,28 @@ import Foundation
 
 import HealthKit
 
+//import Crypto
+
+
+public enum UploadError: Error {
+    case httpError(status: Int, body: String)
+    case missingTimezone
+    case invalidResponse(reason: String)
+    case unauthorized
+}
+/*
+extension String {
+    func sha1() -> String {
+        let data = self.data(using: String.Encoding.utf8)!
+        var digest = [UInt8](repeating: 0, count:Int(CC_SHA1_DIGEST_LENGTH))
+        data.withUnsafeBytes {
+            _ = CC_SHA1($0, CC_LONG(data.count), &digest)
+        }
+        let hexBytes = digest.map { String(format: "%02hhx", $0) }
+        return hexBytes.joined()
+    }
+}
+*/
 class HealthKitManager {
     
     let healthKitStore: HKHealthStore = HKHealthStore()
@@ -34,24 +56,31 @@ class HealthKitManager {
     }
 
     
-    func saveGlucose(glucose: Double, date: Date ) {
+    func saveGlucose(glucose: Int, date: Date, raw_sensor_value: Int, minutes: Int, battery_mv: Int ) {
         
         // Set the quantity type to bloodGlucose.
         let glucoseType = HKQuantityType.quantityType(forIdentifier: HKQuantityTypeIdentifier.bloodGlucose)
         
         // Set the unit of measurement (mg/dl).
-        let glucoseQuantity = HKQuantity(unit: HKUnit.gramUnit(with: .milli).unitDivided(by: HKUnit.literUnit(with: .deci)), doubleValue: glucose)
+        let glucoseQuantity = HKQuantity(unit: HKUnit.gramUnit(with: .milli).unitDivided(by: HKUnit.literUnit(with: .deci)), doubleValue: Double(glucose))
         
+        let metadata = [
+            "raw_sensor_value": raw_sensor_value,
+            "minutes_since_sensor_start": minutes,
+            "transmitter_battery_mv": battery_mv,
+        ] as [String : Any]
         // Set the official Quantity Sample.
-        let glucoseSample = HKQuantitySample(type: glucoseType!, quantity: glucoseQuantity, start: date, end: date)
+        let glucoseSample = HKQuantitySample(type: glucoseType!, quantity: glucoseQuantity, start: date, end: date, metadata: metadata)
         
-        // Save the distance quantity sample to the HealthKit Store.
+        // Save the quantity sample to the HealthKit Store.
         healthKitStore.save(glucoseSample, withCompletion: { (success, error) -> Void in
             if( error != nil ) {
-                print(error)
+                print(error as Any!)
             } else {
                 print("The sample has been recorded! Better go check!")
             }
         })
     }
+    
+
 }
