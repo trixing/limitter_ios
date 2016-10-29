@@ -11,3 +11,11 @@ Please note that this project only works with the modified version of
 LimiTTer which outputs a slightly different data format and higher frequency
 samples (roughly one per minute).  Calibration is done within the iOS app source
 code, not on the sensor.
+
+# Screenshots
+
+## Main page
+![Main page](docs/main.png)
+
+## Settings
+![Settings](docs/settings.png)
