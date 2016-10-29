@@ -312,7 +312,6 @@ class ViewController: UIViewController,  CBCentralManagerDelegate, CBPeripheralD
     
     func updateDisplay() {
         let now = Date()
-
         if self.last_nightscout_upload != nil {
             let difference = Calendar.current.dateComponents([.minute], from: self.last_nightscout_upload!, to: now)
 
@@ -323,15 +322,14 @@ class ViewController: UIViewController,  CBCentralManagerDelegate, CBPeripheralD
             let difference = Calendar.current.dateComponents([.minute], from: self.last_update!, to: now)
             self.labelUpdated.text = "\(difference.minute!)m"
             
-            self.labelBattery.text = String(self.last_bat_mv)
             if (difference.minute! < 5) {
-
-                self.labelMinutes.text = String(self.last_minutes)
-                self.labelBloodGlucose.text = String(self.last_glucose)
+                self.labelBattery.text = "\(self.last_bat_mv)"
+                self.labelMinutes.text = "\(self.last_minutes)"
+                self.labelBloodGlucose.text = "\(self.last_glucose)"
             } else {
-                // Don't display stale information
-                self.labelMinutes.text = "---"
-                self.labelBloodGlucose.text = "---"
+                self.labelBattery.text = "[\(self.last_bat_mv)]"
+                self.labelMinutes.text = "[\(self.last_minutes)]"
+                self.labelBloodGlucose.text = "TOO OLD"
             }
         }
         
@@ -384,13 +382,14 @@ class ViewController: UIViewController,  CBCentralManagerDelegate, CBPeripheralD
             }
             let raw_sensor_value = raw[0]
             let glucose = Int(Double(raw_sensor_value) / glucose_scaler)
-            if (glucose < 10) {
-                return "Glucose value too value - sensor defect (\(glucose)) ??"
-            }
+
             self.last_update = Date()
             self.last_glucose = glucose
             self.last_minutes = minutes!
             let result = "GLUCOSE \(glucose) TREND \(trend) BATTERY \(bat_mv!) MINUTES \(minutes!)"
+            if (glucose < 10) {
+                return "Glucose value too value - sensor defect (\(glucose)) ??"
+            }
             healthManager.saveGlucose(glucose: glucose, date: self.last_update!, raw_sensor_value: raw_sensor_value,
                                       minutes: minutes!, battery_mv: bat_mv!)
             postGlucose(glucose, self.last_update!)
