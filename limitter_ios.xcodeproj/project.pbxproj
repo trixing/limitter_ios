@@ -16,6 +16,8 @@
 		493C13471DB17B4000A9D711 /* limitter_iosTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 493C13461DB17B4000A9D711 /* limitter_iosTests.swift */; };
 		493C13621DB17B5A00A9D711 /* HealthKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 493C13611DB17B5A00A9D711 /* HealthKit.framework */; };
 		493C13641DB188BC00A9D711 /* CoreBluetooth.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 493C13631DB188BC00A9D711 /* CoreBluetooth.framework */; };
+		4966DC6D1DD2788E007F7935 /* UserNotifications.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4966DC6B1DD2788E007F7935 /* UserNotifications.framework */; };
+		4966DC6E1DD2788E007F7935 /* UserNotificationsUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4966DC6C1DD2788E007F7935 /* UserNotificationsUI.framework */; };
 		49AB447A1DBC0A5900F922FA /* HealthKitManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49AB44791DBC0A5900F922FA /* HealthKitManager.swift */; };
 /* End PBXBuildFile section */
 
@@ -45,6 +47,8 @@
 		493C135F1DB17B5A00A9D711 /* limitter_ios.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = limitter_ios.entitlements; sourceTree = "<group>"; };
 		493C13611DB17B5A00A9D711 /* HealthKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = HealthKit.framework; path = System/Library/Frameworks/HealthKit.framework; sourceTree = SDKROOT; };
 		493C13631DB188BC00A9D711 /* CoreBluetooth.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreBluetooth.framework; path = System/Library/Frameworks/CoreBluetooth.framework; sourceTree = SDKROOT; };
+		4966DC6B1DD2788E007F7935 /* UserNotifications.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UserNotifications.framework; path = System/Library/Frameworks/UserNotifications.framework; sourceTree = SDKROOT; };
+		4966DC6C1DD2788E007F7935 /* UserNotificationsUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UserNotificationsUI.framework; path = System/Library/Frameworks/UserNotificationsUI.framework; sourceTree = SDKROOT; };
 		49AB44791DBC0A5900F922FA /* HealthKitManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HealthKitManager.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -53,6 +57,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				4966DC6D1DD2788E007F7935 /* UserNotifications.framework in Frameworks */,
+				4966DC6E1DD2788E007F7935 /* UserNotificationsUI.framework in Frameworks */,
 				493C13641DB188BC00A9D711 /* CoreBluetooth.framework in Frameworks */,
 				493C13621DB17B5A00A9D711 /* HealthKit.framework in Frameworks */,
 			);
@@ -116,6 +122,8 @@
 		493C13601DB17B5A00A9D711 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				4966DC6B1DD2788E007F7935 /* UserNotifications.framework */,
+				4966DC6C1DD2788E007F7935 /* UserNotificationsUI.framework */,
 				493C13631DB188BC00A9D711 /* CoreBluetooth.framework */,
 				493C13611DB17B5A00A9D711 /* HealthKit.framework */,
 			);
@@ -172,7 +180,7 @@
 				TargetAttributes = {
 					493C132D1DB17B4000A9D711 = {
 						CreatedOnToolsVersion = 8.0;
-						DevelopmentTeam = 7Q3KC92REJ;
+						DevelopmentTeam = KX6TBRSZ2Q;
 						ProvisioningStyle = Automatic;
 						SystemCapabilities = {
 							com.apple.HealthKit = {
@@ -378,10 +386,10 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = limitter_ios/limitter_ios.entitlements;
-				DEVELOPMENT_TEAM = 7Q3KC92REJ;
+				DEVELOPMENT_TEAM = KX6TBRSZ2Q;
 				INFOPLIST_FILE = limitter_ios/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = "net.trixing.limitter-ios";
+				PRODUCT_BUNDLE_IDENTIFIER = "net.trixing.ios.limitter-ios";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 3.0;
 			};
@@ -392,10 +400,10 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = limitter_ios/limitter_ios.entitlements;
-				DEVELOPMENT_TEAM = 7Q3KC92REJ;
+				DEVELOPMENT_TEAM = KX6TBRSZ2Q;
 				INFOPLIST_FILE = limitter_ios/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = "net.trixing.limitter-ios";
+				PRODUCT_BUNDLE_IDENTIFIER = "net.trixing.ios.limitter-ios";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 3.0;
 			};

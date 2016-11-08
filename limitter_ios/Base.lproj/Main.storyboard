@@ -26,19 +26,19 @@
                                 <rect key="frame" x="16" y="20" width="343" height="647"/>
                                 <subviews>
                                     <navigationBar contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="yHH-tF-qct">
-                                        <rect key="frame" x="0.0" y="0.0" width="343" height="0.5"/>
+                                        <rect key="frame" x="0.0" y="0.0" width="343" height="0.0"/>
                                         <items>
                                             <navigationItem title="LimiTTer" id="z54-Tk-CYf"/>
                                         </items>
                                     </navigationBar>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="http://github.com/trixing" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="HtG-Dz-6VD">
-                                        <rect key="frame" x="0.0" y="5.5" width="343" height="12"/>
+                                        <rect key="frame" x="0.0" y="5" width="343" height="0.0"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="10"/>
                                         <nil key="textColor"/>
                                         <nil key="highlightedColor"/>
                                     </label>
                                     <stackView opaque="NO" contentMode="scaleToFill" distribution="fillEqually" translatesAutoresizingMaskIntoConstraints="NO" id="a8j-LE-hTu">
-                                        <rect key="frame" x="0.0" y="22.5" width="343" height="20.5"/>
+                                        <rect key="frame" x="0.0" y="10" width="343" height="20.5"/>
                                         <subviews>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="BG" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="dkK-Az-316">
                                                 <rect key="frame" x="0.0" y="0.0" width="86" height="20.5"/>
@@ -67,7 +67,7 @@
                                         </subviews>
                                     </stackView>
                                     <stackView opaque="NO" contentMode="scaleToFill" distribution="fillEqually" translatesAutoresizingMaskIntoConstraints="NO" id="MuV-Es-FZk">
-                                        <rect key="frame" x="0.0" y="48" width="343" height="20.5"/>
+                                        <rect key="frame" x="0.0" y="35.5" width="343" height="20.5"/>
                                         <subviews>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Minutes" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="uDB-xr-gxF">
                                                 <rect key="frame" x="0.0" y="0.0" width="86" height="20.5"/>
@@ -96,7 +96,7 @@
                                         </subviews>
                                     </stackView>
                                     <stackView opaque="NO" contentMode="scaleToFill" distribution="fillEqually" translatesAutoresizingMaskIntoConstraints="NO" id="4px-Kc-elu">
-                                        <rect key="frame" x="0.0" y="73.5" width="343" height="20.5"/>
+                                        <rect key="frame" x="0.0" y="61" width="343" height="20.5"/>
                                         <subviews>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Bluetooth" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="bCo-FZ-jRS">
                                                 <rect key="frame" x="0.0" y="0.0" width="86" height="20.5"/>
@@ -124,6 +124,12 @@
                                             </label>
                                         </subviews>
                                     </stackView>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="0" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="rIf-aV-a6Z" userLabel="BGBig">
+                                        <rect key="frame" x="0.0" y="86.5" width="343" height="7.5"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="128"/>
+                                        <color key="textColor" red="1" green="0.55192364278348305" blue="0.081508205609283846" alpha="1" colorSpace="calibratedRGB"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
                                     <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="20" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="36b-vA-5ue" userLabel="History">
                                         <rect key="frame" x="0.0" y="99" width="343" height="548"/>
                                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
@@ -168,6 +174,7 @@
                         <outlet property="ListBox" destination="36b-vA-5ue" id="UwA-PM-gze"/>
                         <outlet property="labelBattery" destination="5Rj-lu-5eR" id="kaP-Kl-pVh"/>
                         <outlet property="labelBloodGlucose" destination="cVz-IA-eyv" id="Nri-EO-bha"/>
+                        <outlet property="labelBloodGlucoseBig" destination="rIf-aV-a6Z" id="zek-yW-Lf0"/>
                         <outlet property="labelBluetooth" destination="kT2-To-fFk" id="34g-Mo-I3j"/>
                         <outlet property="labelMinutes" destination="zHs-uO-W35" id="SyX-kf-XR6"/>
                         <outlet property="labelUpdated" destination="Fc1-NP-gVV" id="qua-Op-awL"/>

@@ -9,6 +9,8 @@
 import UIKit
 import CoreBluetooth
 import HealthKit
+import UserNotifications
+import UserNotificationsUI
 
 // http://sketchytech.blogspot.de/2016/02/resurrecting-commoncrypto-in-swift-for.html
 extension String {
@@ -46,6 +48,7 @@ class ViewController: UIViewController,  CBCentralManagerDelegate, CBPeripheralD
     @IBOutlet weak var labelUpload: UILabel!
     @IBOutlet weak var labelUpdated: UILabel!
     @IBOutlet weak var labelBluetooth: UILabel!
+    @IBOutlet weak var labelBloodGlucoseBig: UILabel!
     
     private      var centralManager:   CBCentralManager!
     private      var activePeripheral: CBPeripheral?
@@ -95,8 +98,40 @@ class ViewController: UIViewController,  CBCentralManagerDelegate, CBPeripheralD
         getHealthKitPermission()
         log(str: "Started")
         Timer.scheduledTimer(timeInterval: 10, target:self, selector: #selector(ViewController.updateDisplay), userInfo: nil, repeats: true)
+        UNUserNotificationCenter.current().requestAuthorization(options: [.alert, .sound, .badge]) { (granted: Bool, error: Error?) in
+            // Do something here
+            if (granted) {
+                self.log(str: "Notification successful.")
+            } else {
+                self.log(str: "Notifications not allowed.")
+            }
+        }
     }
     
+    private func glucoseNotification(_ glucose: String, _ badge: Int) {
+        let content = UNMutableNotificationContent()
+        
+        content.title = "Glucose Value"
+        content.body = glucose
+        // content.sound = UNNotificationSound.default()
+        content.badge = NSNumber(value: badge)
+        
+        // Deliver the notification in five seconds.
+        //let trigger = UNTimeIntervalNotificationTrigger.init(timeInterval: 1, repeats: false)
+       // let request = UNNotificationRequest.init(identifier: "FiveSecond", content: content, trigger: trigger)
+        let request = UNNotificationRequest.init(identifier: "Now", content: content, trigger: nil)
+       
+        // Schedule the notification.
+        let center = UNUserNotificationCenter.current()
+        // remove old notifications
+        center.removeAllDeliveredNotifications()
+        center.removeAllPendingNotificationRequests()
+        // post new one
+        center.add(request) { (error) in
+            //self.log(str: error)
+        }
+        
+    }
     private func log(str: String) {
         let currentDateTime = Date()
         let formatter = DateFormatter()
@@ -326,13 +361,19 @@ class ViewController: UIViewController,  CBCentralManagerDelegate, CBPeripheralD
                 self.labelBattery.text = "\(self.last_bat_mv)"
                 self.labelMinutes.text = "\(self.last_minutes)"
                 self.labelBloodGlucose.text = "\(self.last_glucose)"
+                self.labelBloodGlucoseBig.text = "\(self.last_glucose)"
+                self.glucoseNotification("\(self.last_glucose)", self.last_glucose)
             } else {
                 self.labelBattery.text = "[\(self.last_bat_mv)]"
                 self.labelMinutes.text = "[\(self.last_minutes)]"
                 self.labelBloodGlucose.text = "TOO OLD"
+                self.labelBloodGlucose.text = "OLD"
+                self.glucoseNotification("Glucose Value stale", 0)
+
             }
         }
-        
+        //self.glucoseNotification("Glucose Startup", 0)
+
         self.labelBluetooth.text = self.bluetooth_state
  
     }

@@ -2,17 +2,6 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
-	<key>NSHealthShareUsageDescription</key>
-	<string>Just writing values, no sharing</string>
-	<key>NSHealthUpdateUsageDescription</key>
-	<string>Writing Blood Glucose Values from Limitter</string>
-	<key>UIBackgroundModes</key>
-	<array>
-		<string>bluetooth-central</string>
-		<string>bluetooth-central</string>
-	</array>
-	<key>NSBluetoothPeripheralUsageDescription</key>
-	<string>Reading CGM Data</string>
 	<key>CFBundleDevelopmentRegion</key>
 	<string>en</string>
 	<key>CFBundleExecutable</key>
@@ -31,6 +20,17 @@
 	<string>1</string>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
+	<key>NSBluetoothPeripheralUsageDescription</key>
+	<string>Reading CGM Data</string>
+	<key>NSHealthShareUsageDescription</key>
+	<string>Just writing values, no sharing</string>
+	<key>NSHealthUpdateUsageDescription</key>
+	<string>Writing Blood Glucose Values from Limitter</string>
+	<key>UIBackgroundModes</key>
+	<array>
+		<string>bluetooth-central</string>
+		<string>bluetooth-central</string>
+	</array>
 	<key>UILaunchStoryboardName</key>
 	<string>LaunchScreen</string>
 	<key>UIMainStoryboardFile</key>
