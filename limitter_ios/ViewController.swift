@@ -96,29 +96,30 @@ class ViewController: UIViewController,  CBCentralManagerDelegate, CBPeripheralD
             delegate: self, queue: DispatchQueue.main, options: [ CBCentralManagerOptionRestoreIdentifierKey:
                 centralManagerIdentifier ])
         getHealthKitPermission()
-        log(str: "Started")
+       self.log("Started")
         Timer.scheduledTimer(timeInterval: 10, target:self, selector: #selector(ViewController.updateDisplay), userInfo: nil, repeats: true)
         UNUserNotificationCenter.current().requestAuthorization(options: [.alert, .sound, .badge]) { (granted: Bool, error: Error?) in
             // Do something here
             if (granted) {
-                self.log(str: "Notification successful.")
+                self.log("Notification successful.")
             } else {
-                self.log(str: "Notifications not allowed.")
+                self.log("Notifications not allowed.")
             }
         }
     }
     
+    private var last_notification_value: String = ""
     private func glucoseNotification(_ glucose: String, _ badge: Int) {
         let content = UNMutableNotificationContent()
-        
+        if  (self.last_notification_value == glucose) {
+            return
+        }
+        self.last_notification_value = glucose
         content.title = "Glucose Value"
         content.body = glucose
         // content.sound = UNNotificationSound.default()
         content.badge = NSNumber(value: badge)
         
-        // Deliver the notification in five seconds.
-        //let trigger = UNTimeIntervalNotificationTrigger.init(timeInterval: 1, repeats: false)
-       // let request = UNNotificationRequest.init(identifier: "FiveSecond", content: content, trigger: trigger)
         let request = UNNotificationRequest.init(identifier: "Now", content: content, trigger: nil)
        
         // Schedule the notification.
@@ -128,11 +129,10 @@ class ViewController: UIViewController,  CBCentralManagerDelegate, CBPeripheralD
         center.removeAllPendingNotificationRequests()
         // post new one
         center.add(request) { (error) in
-            //self.log(str: error)
         }
         
     }
-    private func log(str: String) {
+    private func log(_ str: String) {
         let currentDateTime = Date()
         let formatter = DateFormatter()
         formatter.dateFormat = "yyyy-MM-dd HH:mm:ss"
@@ -140,6 +140,13 @@ class ViewController: UIViewController,  CBCentralManagerDelegate, CBPeripheralD
         history.insert(newstr, at: 0)
         print("LOG \(newstr)")
         ListBox.reloadData()
+    }
+    
+    private var debug_mode = false
+    private func dbglog(_ str: String) {
+        if (self.debug_mode) {
+            self.log(str)
+        }
     }
     
     func numberOfSections(in tableView: UITableView) -> Int {
@@ -196,35 +203,35 @@ class ViewController: UIViewController,  CBCentralManagerDelegate, CBPeripheralD
     func centralManagerDidUpdateState(_ central: CBCentralManager) {
         switch(central.state){
         case .poweredOn:
-            log(str: "Bluetooth is powered ON")
+            self.log("Bluetooth is powered ON")
             self.bluetooth_state = "On"
             self.startScan()
 
         case .poweredOff:
-            log(str: "Bluetooth is powered OFF")
+            self.log("Bluetooth is powered OFF")
             self.bluetooth_state = "Off"
 
         case .resetting:
-            log(str: "Bluetooth is resetting")
+            self.log("Bluetooth is resetting")
             self.bluetooth_state = "Reset"
 
         case .unauthorized:
-            log(str: "Bluetooth is unauthorized")
+            self.log("Bluetooth is unauthorized")
             self.bluetooth_state = "UnAuth"
 
         case .unknown:
-            log(str: "Bluetooth is unknown")
+            self.log("Bluetooth is unknown")
             self.bluetooth_state = "Unknown"
 
         case .unsupported:
-            log(str: "Bluetooth is not supported")
+            self.log("Bluetooth is not supported")
             self.bluetooth_state = "NoSupport"
 
         }
     }
     
     func centralManager(_ central: CBCentralManager,  didDiscover peripheral: CBPeripheral, advertisementData: [String : Any], rssi: NSNumber) {
-        log(str: "Discovered \(peripheral.name) \(peripheral.state) \(rssi) \(peripheral.identifier)")
+       self.log("Discovered \(peripheral.name) \(peripheral.state) \(rssi) \(peripheral.identifier)")
         let bt_uid = self.settingGetBTUid()
         var found : Bool = false
         if bt_uid != nil {
@@ -237,15 +244,15 @@ class ViewController: UIViewController,  CBCentralManagerDelegate, CBPeripheralD
         
         if found {
             if peripheral.state == .disconnected  {
-                log(str: "Connecting to \(peripheral.name) \(peripheral.identifier)")
+               self.log("Connecting to \(peripheral.name) \(peripheral.identifier)")
                 self.defaults.set(peripheral.identifier.uuidString, forKey: "bluetooth_uid")
                 self.activePeripheral = peripheral
                 central.connect(peripheral , options: [CBConnectPeripheralOptionNotifyOnDisconnectionKey : NSNumber(value: true)])
             } else if peripheral.state == .connected {
-                log(str: "Already connected to \(peripheral.name)  \(peripheral.identifier)")
+               self.log("Already connected to \(peripheral.name)  \(peripheral.identifier)")
                 self.activePeripheral = peripheral
             } else {
-                log(str: "Unknown device state")
+               self.log("Unknown device state")
             }
             peripheral.delegate = self
             central.stopScan()
@@ -253,24 +260,24 @@ class ViewController: UIViewController,  CBCentralManagerDelegate, CBPeripheralD
     }
     
     func centralManager(_ central: CBCentralManager, didFailToConnect: CBPeripheral, error: Error?) {
-        log(str: "Connection failed")
+       self.log("Connection failed")
         self.bluetooth_state = "ConnFail"
 
         if error != nil {
-            log(str: "Error connecting to peripheral: \(error?.localizedDescription)")
+           self.log("Error connecting to peripheral: \(error?.localizedDescription)")
             return
         }
     }
     
     func centralManager(_ central: CBCentralManager, didConnect peripheral: CBPeripheral) {
-        log(str: "Peripheral connected.")
+       self.log("Peripheral connected.")
         self.bluetooth_state = "ConnOK"
         peripheral.delegate = self
         peripheral.discoverServices(nil)
     }
     
     func centralManager(_ central: CBCentralManager, willRestoreState state:  [String : Any]){
-        log(str: "Restoring state")
+        self.log("Restoring state")
         self.centralManager = central
         let peripherals:[CBPeripheral] = state[CBCentralManagerRestoredStatePeripheralsKey] as! [CBPeripheral]!
         //let peripherals = dict[state[CBCentralManagerRestoredStatePeripheralsKey]]
@@ -278,11 +285,11 @@ class ViewController: UIViewController,  CBCentralManagerDelegate, CBPeripheralD
             self.startScan()
         }
         for peripheral: CBPeripheral in peripherals {
-            log(str: "Rediscover characteristics of peripheral \(peripheral.identifier)")
+            self.log("Rediscover characteristics of peripheral \(peripheral.identifier)")
             self.activePeripheral = peripheral
             peripheral.delegate = self
             for service: CBService in peripheral.services! {
-                log(str: "Discover characteristics \(service.uuid)")
+                self.log("Discover characteristics \(service.uuid)")
                 if service.uuid == CBUUID(string: LIMITTER_SERVICE_UUID) {
                     // TODO should only list characteristics we want
                     peripheral.discoverCharacteristics(nil, for: service)
@@ -293,7 +300,7 @@ class ViewController: UIViewController,  CBCentralManagerDelegate, CBPeripheralD
     }
     
     @objc(centralManager:didDisconnectPeripheral:error:) func centralManager(_ central: CBCentralManager, didDisconnectPeripheral peripheral: CBPeripheral, error: Error?) {
-        log(str: "Peripheral disconnected, reconnecting")
+        self.log("Peripheral disconnected, reconnecting")
         self.bluetooth_state = "Discon"
 
         //self.activePeripheral = nil
@@ -306,7 +313,7 @@ class ViewController: UIViewController,  CBCentralManagerDelegate, CBPeripheralD
     func peripheral(_ peripheral: CBPeripheral, didDiscoverServices error: Error?) {
 
         if error != nil {
-            log(str: "Error discovering services \(error?.localizedDescription)")
+            self.log("Error discovering services \(error?.localizedDescription)")
             self.activePeripheral = nil
             self.bluetooth_state = "ErrServ"
 
@@ -314,25 +321,26 @@ class ViewController: UIViewController,  CBCentralManagerDelegate, CBPeripheralD
         }
         
         for service: CBService in peripheral.services! {
-            log(str: "Discover characteristics \(service.uuid)")
             if service.uuid == CBUUID(string: LIMITTER_SERVICE_UUID) {
                 // TODO should only list characteristics we want
+                self.bluetooth_state = "Discover"
+                self.dbglog("Discover characteristics \(service.uuid)")
                 peripheral.discoverCharacteristics(nil, for: service)
             }
         }
     }
     
     func peripheral(_ peripheral: CBPeripheral, didDiscoverCharacteristicsFor service: CBService, error: Error?) {
-        log(str: "Characteristics")
+        self.dbglog("Characteristics")
         if error != nil {
-            log(str: "Error discovering characteristics \(error?.localizedDescription)")
+            self.log("Error discovering characteristics \(error?.localizedDescription)")
             self.bluetooth_state = "ErrChar"
 
             return
         }
-        
+        self.bluetooth_state = "CharFound"
         for characteristic: CBCharacteristic in service.characteristics! {
-            log(str: "Char \(characteristic.uuid)")
+            self.dbglog("Char \(characteristic.uuid)")
             if characteristic.uuid == CBUUID(string: LIMITTER_CHAR_UUID) {
                 //peripheral.readValue(for: characteristic)
                 peripheral.setNotifyValue(true, for: characteristic)
@@ -341,7 +349,7 @@ class ViewController: UIViewController,  CBCentralManagerDelegate, CBPeripheralD
         }
     }
     func peripheral(_ peripheral: CBPeripheral, didUpdateNotificationStateFor characteristic: CBCharacteristic, error: Error?) {
-        log(str: "UpdateNotificationState")
+        self.dbglog("UpdateNotificationState")
         self.bluetooth_state = "Listening"
     }
     
@@ -362,21 +370,25 @@ class ViewController: UIViewController,  CBCentralManagerDelegate, CBPeripheralD
                 self.labelMinutes.text = "\(self.last_minutes)"
                 self.labelBloodGlucose.text = "\(self.last_glucose)"
                 self.labelBloodGlucoseBig.text = "\(self.last_glucose)"
-                self.glucoseNotification("\(self.last_glucose)", self.last_glucose)
+                var notification: String = "\(self.last_glucose) mg/dl"
+                if (self.last_bat_mv < 3400) {
+                    notification = "\(notification) CHANGE BATTERY !! \(self.last_bat_mv)"
+                }
+                self.glucoseNotification(notification, self.last_glucose)
             } else {
                 self.labelBattery.text = "[\(self.last_bat_mv)]"
                 self.labelMinutes.text = "[\(self.last_minutes)]"
                 self.labelBloodGlucose.text = "TOO OLD"
-                self.labelBloodGlucose.text = "OLD"
-                self.glucoseNotification("Glucose Value stale", 0)
+                self.labelBloodGlucoseBig.text = "---"
+                self.glucoseNotification("Value too old, check battery and transmitter position.", 0)
 
             }
+        } else {
+            self.glucoseNotification("Bluetooth \(self.bluetooth_state)", 0)
         }
-        //self.glucoseNotification("Glucose Startup", 0)
-
         self.labelBluetooth.text = self.bluetooth_state
- 
     }
+    
     var last_status = ""
     private var last_update: Date? = nil
     private var last_glucose = 0
@@ -396,7 +408,8 @@ class ViewController: UIViewController,  CBCentralManagerDelegate, CBPeripheralD
         }
         self.last_bat_mv = bat_mv!
         if bat_mv! < 3400 {
-            return "Battery soon low! \(bat_mv!)"
+            // Should probably sent an alert
+            self.log("Battery soon low! \(bat_mv!)")
         }
         
         let status = arr[0]
@@ -433,7 +446,7 @@ class ViewController: UIViewController,  CBCentralManagerDelegate, CBPeripheralD
             }
             healthManager.saveGlucose(glucose: glucose, date: self.last_update!, raw_sensor_value: raw_sensor_value,
                                       minutes: minutes!, battery_mv: bat_mv!)
-            postGlucose(glucose, self.last_update!)
+            postGlucose(glucose, self.last_update!, minutes!, bat_mv!)
             return result // success
         } else {
             return "Error decoding status to minutes \(status)"
@@ -444,13 +457,13 @@ class ViewController: UIViewController,  CBCentralManagerDelegate, CBPeripheralD
     @objc(peripheral:didUpdateValueForCharacteristic:error:) func peripheral(_ peripheral: CBPeripheral, didUpdateValueFor characteristic: CBCharacteristic, error: Error?) {
         if characteristic.uuid == CBUUID(string: LIMITTER_CHAR_UUID) {
             let rx = String(data: characteristic.value!, encoding: String.Encoding.ascii)!
-            log(str: "RX " + rx)
+           self.log("RX " + rx)
 
             let msg = decodeSensor(rx)
-            log(str: msg)
+           self.log(msg)
             self.updateDisplay()
         } else {
-            log(str: "Discard value \(characteristic.uuid)")
+           self.log("Discard value \(characteristic.uuid)")
         }
     }
     
@@ -458,7 +471,7 @@ class ViewController: UIViewController,  CBCentralManagerDelegate, CBPeripheralD
     var entries: [[String: Any]] = []
     private var last_nightscout_upload: Date? = nil
 
-    public func postGlucose(_ glucose: Int, _ date: Date) {
+    public func postGlucose(_ glucose: Int, _ date: Date, _ minutes: Int, _ battery_mv: Int) {
         
         // TODO: Should only accept meter messages from specified meter ids.
         // Need to add an interface to allow user to specify linked meters.
@@ -469,13 +482,15 @@ class ViewController: UIViewController,  CBCentralManagerDelegate, CBPeripheralD
          */
         let epochTime = date.timeIntervalSince1970 * 1000
         let formatterISO8601 = DateFormatter()
-        
+        formatterISO8601.dateFormat = "yyyy-MM-dd'T'HH:mm:ssZ"
         
         let entry: [String: Any] = [
             "date": epochTime,
             "dateString": formatterISO8601.string(from: date),
             "sgv": glucose,
             "device": "LimiTTer-iOS",
+            "battery_mv": battery_mv,
+            "sensor_minutes": minutes,
             "type": "sgv"
         ]
         self.entries.append(entry)
@@ -493,17 +508,17 @@ class ViewController: UIViewController,  CBCentralManagerDelegate, CBPeripheralD
         let endpoint = defaultNightscoutEntriesPath
         let enabled = self.defaults.bool(forKey: "nightscout_enabled")
         if (enabled == false) {
-            self.log(str: "Nightscout not enabled.")
+            self.log("Nightscout not enabled.")
             return false
         }
         let apiURL = self.defaults.url(forKey: "nightscout_server")
         let apiStringSecret = self.defaults.string(forKey: "nightscout_api_secret")
         if (apiURL == nil) {
-            self.log(str: "Nightscout URL not defined in settings.")
+            self.log("Nightscout URL not defined in settings.")
             return false
         }
         if (apiStringSecret == nil) {
-            self.log(str: "Nightscout ApiSecret not defined in settings.")
+            self.log("Nightscout ApiSecret not defined in settings.")
             return false
         }
         let apiSecret = apiStringSecret!.sha1()
@@ -564,9 +579,9 @@ class ViewController: UIViewController,  CBCentralManagerDelegate, CBPeripheralD
             success = false
         }
         if (success) {
-            self.log(str: "Successfully uploaded data.")
+            self.log("Successfully uploaded data.")
         } else {
-            self.log(str: "Upload error: " + error_msg)
+            self.log("Upload error: " + error_msg)
         }
         return success
     }
